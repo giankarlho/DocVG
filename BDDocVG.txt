@@ -1,0 +1,85 @@
+PERSONAS (10 atributos)
+
+id
+nombre
+apellido
+celular
+correo
+dni
+tipo: alumno, monitor, externo
+estado:A,I
+distrito: CODUBI
+dirección:
+titulo
+
+EMPRESA (6 atributos)
+id_emp
+razon social
+razon comercial
+ruc
+dirección
+ubigeo
+telefonos
+
+DETEMPRESA
+id_emp
+id_persona
+cargo_persona
+estado:	activa/desactivada
+fecha asignación
+
+
+
+CARRERA (x base de datos insertar)
+
+COD_CAR		int
+ABRCAR		AS/PA
+NAME_CAR	
+ABRMOD		MI,MII,MIII
+YEAR_CAR	2016	
+EST_CAR		A/I
+
+
+AULA
+
+COD_AULA
+COD_CAR		FK
+SEM_AULA	semestre
+
+DETAULA
+COD_AULA
+ID_PERSONA
+EST_DETAULA
+
+
+
+DOCUMENTO TRANSACCIONAL
+COD_DOC		Nro-año-AbrCarrera/AbrAsunto
+id_documento
+fechaDoc
+hora del viaje
+fecha del viaje
+
+DETdocTransaccional
+COD_DOC		pk
+id_persona	null		not null	
+id_aula		not null	null
+
+
+DOCUMENTO MAESTRO
+
+SOLICITUD   	S
+CARTAS		C
+OFICIOS		O
+MEMORANDUM	M
+
+SVE	SOLICITUD DE VIAJE DE ESTUDIO
+STP	SOLICITUD DE TERTULIA PROFESIONAL
+SPP	SOLICITUD DE PRÁCTICAS PRE-PROFESIONALES
+SRE
+OIN	
+
+Asignación de personas a empresa
+Desactivar asignación de salón, dashboard, carrera, aula
+
+
