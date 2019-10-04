@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Registro de Empresas</title>
+    </h:head>
+    <h:body>
+        <!--IDEMP RAZEMP     COMEMP  RUCEMP ESTEMP DIREMP CODUBI TELEMP-->
+        <p:growl showDetail="true" id="messages" />
+        <center>
+            <h:form id="formIns">
+                <h1 style="margin-top:0">Registrar Empresa</h1>
+                <p:panelGrid columns="4">
+                    <p:outputLabel value="Razon Social"/>
+                    <p:inputText value="#{empresaC.empresa.RAZEMP}" maxlength="50" required="true" requiredMessage="Se reqiuere la razon social">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ _á_é_í_ó_ú]/"/>
+                    </p:inputText>
+                    <p:outputLabel value="Razon Comercial"/>
+                    <p:inputText value="#{empresaC.empresa.COMEMP}" maxlength="50">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ _á_é_í_ó_ú]/"/>
+                    </p:inputText>
+                    <p:outputLabel value="Direccion"/>
+                    <p:inputText value="#{empresaC.empresa.DIREMP}" maxlength="50">
+                    </p:inputText>
+                    <p:outputLabel value="RUC"/>
+                    <p:inputText value="#{empresaC.empresa.RUCEMP}" maxlength="11" required="true" requiredMessage="Se reqiuere el ruc">
+                        <p:keyFilter regEx="/[0-9]/"/>
+                    </p:inputText>
+                    <p:outputLabel value="Distrito"  />
+                    <p:autoComplete  value="#{empresaC.empresa.CODUBI}" completeMethod="#{empresaC.listarUbigeo}" />
+                    <p:outputLabel value="Teléfono" />
+                    <p:inputText value="#{empresaC.empresa.TELEMP}" maxlength="20">
+                        <p:keyFilter regEx="/[0-9]/"/>
+                    </p:inputText>
+                    <!--                    <p:row>
+                                            <p:column colspan="4"></p:column>
+                                        </p:row>-->
+                    
+                </p:panelGrid>
+                <p:panel><h:outputLabel for="multiple" value="Responsables" />
+                    <p:selectCheckboxMenu id="multiple" value="#{empresaC.selectedResp}" label="Cities" multiple="true"
+                                          filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                        <f:selectItems value="#{empresaC.responsables}" />
+                    </p:selectCheckboxMenu></p:panel>
+                <p/>
+
+                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns"/> 
+                <p:commandButton value="Registrar" actionListener="#{empresaC.registrar()}" update="formIns"/> 
+
+                <p:commandButton value="Submit" update="displayItems" oncomplete="PF('itemDialog').show()" style="margin-top:10px;" />
+
+                <p:dialog header="Selected Items" modal="true" showEffect="fade" hideEffect="fade" widgetVar="itemDialog" width="250">
+                    <p:outputPanel id="displayItems">
+                        <p:dataList value="#{empresaC.responsables}" var="responsables" emptyMessage="No cities selected" style="margin-bottom: 10px;">
+                            <f:facet name="header">
+                                Multiple
+                            </f:facet>
+                            #{responsables}
+                        </p:dataList>                       
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </center>
+
+
+
+    </h:body>
+</html>
+

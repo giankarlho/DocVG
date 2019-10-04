@@ -1,10 +1,12 @@
 package controlador;
+
 import java.util.Map;
 import java.util.HashMap;
 import reports.report;
 import dao.EmpresaImpl;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -12,110 +14,47 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import model.Empresa;
+import model.Persona;
 
 @Named(value = "empresaC")
 @SessionScoped
 public class EmpresaC implements Serializable {
 
-    private Empresa empresa = new Empresa();
+    private Empresa empresa;
     private Empresa select;
     private List<Empresa> listadoEmp;
-    private List<Empresa> listadoEmp2;
-    private List<Empresa> listadoEmpIna;
-    private List<Empresa> listadoEmpIna2;
-
-    @PostConstruct
-    public void iniciar() {
-        try {
-            listar();
-            listarIna();
-        } catch (Exception e) {
-        }
+    private String[] selectedResp;
+    private List<String> responsables = new ArrayList<String>();   
+  
+    public EmpresaC() throws Exception {        
+        empresa = new Empresa();
+        select = new Empresa();
+        listadoEmp = new ArrayList<>(); 
+        listarResp();
     }
 
     public void registrar() throws Exception {
         EmpresaImpl dao;
         try {
             dao = new EmpresaImpl();
-            empresa.setCODUBI(dao.obtenerCodigoEmpresa(empresa.getCODUBI()));
+            empresa.setCODUBI(dao.getCodUbigeo(empresa.getCODUBI()));
             dao.registrar(empresa);
             limpiar();
-            listar();
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro", "Completado..."));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro", "Completado..."));
         } catch (Exception e) {
             throw e;
         }
     }
 
-    public List<String> completeTextEmpresa(String query) throws SQLException {
-        EmpresaImpl Dao = new EmpresaImpl();
-        return Dao.autocompleteEmpresa(query);
+    public List<String> listarUbigeo(String query) throws SQLException {
+        EmpresaImpl ubigeo = new EmpresaImpl();
+        return ubigeo.listarUbigeo(query);
     }
 
-    public List<String> completeTextResponsable(String query) throws SQLException {
-        EmpresaImpl Dao = new EmpresaImpl();
-        return Dao.autocompleteResponsable(query);
-    }
-
-    public void modificar() throws Exception {
-        EmpresaImpl dao;
-        try {
-            dao = new EmpresaImpl();
-            select.setCODUBI(dao.obtenerCodigoEmpresa(select.getCODUBI()));
-            System.out.println(select.getCODUBI());
-            dao.modificar(select);
-            listar();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Actualización", "Completado.."));
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    public void eliminar() throws Exception {
-        EmpresaImpl dao;
-        try {
-            dao = new EmpresaImpl();
-            dao.eliminar(select);
-            listar();
-            listarIna();
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "Eliminación", "Completado.."));
-        } catch (SQLException e) {
-            throw e;
-        }
-    }
-    public void activar() throws Exception {
-        EmpresaImpl dao;
-        try {
-            dao = new EmpresaImpl();
-            dao.activar(select);
-            listarIna();
-            listar();
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Activación", "Completado.."));
-        } catch (SQLException e) {
-            throw e;
-        }
-    }
-
-    public void listar() throws Exception {
-        EmpresaImpl dao;
-        try {
-            dao = new EmpresaImpl();
-            listadoEmp = dao.listar();
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-    public void listarIna() throws Exception {
-        EmpresaImpl dao;
-        try {
-            dao = new EmpresaImpl();
-            listadoEmpIna = dao.listarIna();
-        } catch (Exception e) {
-            throw e;
-        }
+    public List<String> listarResp() throws SQLException, Exception{
+        EmpresaImpl dao = new EmpresaImpl();
+        responsables =dao.listarResp();
+        return responsables;        
     }
 
     public void limpiar() throws Exception {
@@ -124,34 +63,6 @@ public class EmpresaC implements Serializable {
         } catch (Exception e) {
             throw e;
         }
-    }
-    
-    public void REPORTE_PDF_EMPRESA(String CodigoEMPRESA) throws Exception {
-        report reportAlu = new report();
-        try {
-            Map<String, Object> parameters = new HashMap(); // Libro de parametros
-            parameters.put(null, CodigoEMPRESA); //Insertamos un parametro
-            reportAlu.exportarPDFEmpresa(parameters);//Pido exportar Reporte con los parametros
-//            report.exportarPDF2(parameters);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-
-    public List<Empresa> getListadorEmp() {
-        return listadoEmp;
-    }
-
-    public void setListadoEmp(List<Empresa> listadoEmp) {
-        this.listadoEmp = listadoEmp;
     }
 
     public Empresa getSelect() {
@@ -162,30 +73,35 @@ public class EmpresaC implements Serializable {
         this.select = select;
     }
 
-    public List<Empresa> getListadoEmp2() {
-        return listadoEmp2;
+    public List<Empresa> getListadoEmp() {
+        return listadoEmp;
     }
 
-    public void setListadoEmp2(List<Empresa> listadoEmp2) {
-        this.listadoEmp2 = listadoEmp2;
+    public void setListadoEmp(List<Empresa> listadoEmp) {
+        this.listadoEmp = listadoEmp;
     }
 
-    public List<Empresa> getListadoEmpIna() {
-        return listadoEmpIna;
+    public String[] getSelectedResp() {
+        return selectedResp;
     }
 
-    public void setListadoEmpIna(List<Empresa> listadoEmpIna) {
-        this.listadoEmpIna = listadoEmpIna;
+    public void setSelectedResp(String[] selectedResp) {
+        this.selectedResp = selectedResp;
+    } 
+
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public List<Empresa> getListadoEmpIna2() {
-        return listadoEmpIna2;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
-    public void setListadoEmpIna2(List<Empresa> listadoEmpIna2) {
-        this.listadoEmpIna2 = listadoEmpIna2;
+    public List<String> getResponsables() {
+        return responsables;
     }
-    
-    
 
+    public void setResponsables(List<String> responsables) {
+        this.responsables = responsables;
+    }
 }

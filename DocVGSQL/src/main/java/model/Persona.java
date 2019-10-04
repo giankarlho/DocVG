@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 
 public class Persona {
 // IDPER     NOMPER   APEPER CELPER  CORPER   DNIPER   TIPPER ESTPER DIRPER   CODUBI TITPER 
@@ -13,6 +15,15 @@ public class Persona {
     private String ESTPER;
     private String DIRPER;
     private String CODUBI;
+    private Date NACPER;
+
+    public Date getNACPER() {
+        return NACPER;
+    }
+
+    public void setNACPER(Date NACPER) {
+        this.NACPER = NACPER;
+    }
     private String TITPER;
 
     public int getIDPER() {

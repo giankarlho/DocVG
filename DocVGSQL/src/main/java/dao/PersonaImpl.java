@@ -15,7 +15,7 @@ public class PersonaImpl extends Conexion implements ICRUD<Persona> {
         try {
             this.Conexion(); //IDPER     NOMPER   APEPER CELPER  CORPER   DNIPER   TIPPER ESTPER DIRPER   CODUBI TITPER 
             String sql = "insert into PERSONA"
-                    + "(NOMPER,APEPER,CELPER,CORPER,DNIPER,TIPPER,ESTPER,DIRPER,CODUBI,TITPER)"
+                    + "(NOMPER,APEPER,CELPER,CORPER,DNIPER,TIPPER,ESTPER,DIRPER,CODUBI,NACPER,TITPER)"
                     + "values (?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = this.getCn().prepareStatement(sql);
             ps.setString(1, persona.getNOMPER());
@@ -27,7 +27,8 @@ public class PersonaImpl extends Conexion implements ICRUD<Persona> {
             ps.setString(7, persona.getESTPER());
             ps.setString(8, persona.getDIRPER());
             ps.setString(9, persona.getCODUBI());
-            ps.setString(10, persona.getTITPER());
+            ps.setDate(10, persona.getNACPER());
+            ps.setString(11, persona.getTITPER());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
