@@ -9,11 +9,36 @@
     </h:head>
     <h:body>
         <h:form>
+            <p:panelGrid columns="4">
+                <p:outputLabel value="Razon Social"/>
+                <p:inputText value="#{empresaC.empresa.RAZEMP}" maxlength="50" required="true" requiredMessage="Se reqiuere la razon social">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ _á_é_í_ó_ú]/"/>
+                </p:inputText>
+                <p:outputLabel value="Razon Comercial"/>
+                <p:inputText value="#{empresaC.empresa.COMEMP}" maxlength="50">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ _á_é_í_ó_ú]/"/>
+                </p:inputText>
+                <p:outputLabel value="Direccion"/>
+                <p:inputText value="#{empresaC.empresa.DIREMP}" maxlength="50">
+                </p:inputText>
+                <p:outputLabel value="RUC"/>
+                <p:inputText value="#{empresaC.empresa.RUCEMP}" maxlength="11" required="true" requiredMessage="Se reqiuere el ruc">
+                    <p:keyFilter regEx="/[0-9]/"/>
+                </p:inputText>
+                <p:outputLabel value="Distrito"  />
+                <p:autoComplete  value="#{empresaC.empresa.CODUBI}" completeMethod="#{empresaC.listarUbigeo}" />
+                <p:outputLabel value="Teléfono" />
+                <p:inputText value="#{empresaC.empresa.TELEMP}" maxlength="20">
+                    <p:keyFilter regEx="/[0-9]/"/>
+                </p:inputText>
+            </p:panelGrid>
+        </h:form>
+        <h:form>
             <h:panelGrid columns="2" cellpadding="5"> 
                 <h:outputLabel for="multiple" value="Multiple:" />
-                <p:selectCheckboxMenu id="multiple" value="#{checkboxView.selectedCities}" label="Cities" multiple="true"
+                <p:selectCheckboxMenu id="multiple" value="#{checkboxView.selectedResp}" label="Cities" multiple="true"
                                       filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
-                    <f:selectItems value="#{checkboxView.cities}" />
+                    <f:selectItems value="#{checkboxView.responsables}" />
                 </p:selectCheckboxMenu>  
 
             </h:panelGrid>
@@ -23,7 +48,7 @@
             <p:dialog header="Selected Items" modal="true" showEffect="fade" hideEffect="fade" widgetVar="itemDialog" width="250">
                 <p:outputPanel id="displayItems">
 
-                    <p:dataList value="#{checkboxView.selectedCities}" var="city" emptyMessage="No cities selected" style="margin-bottom: 10px;">
+                    <p:dataList value="#{checkboxView.selectedResp}" var="city" emptyMessage="No cities selected" style="margin-bottom: 10px;">
                         <f:facet name="header">
                             Multiple
                         </f:facet>

@@ -1,31 +1,30 @@
-
 package prueba;
 
+import controlador.EmpresaC;
 import dao.EmpresaImpl;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
-
 public class Pruebas {
-   
+
     public static String[] selectedCities;
-    public static List<String> cities = new ArrayList<String>(); 
+    public static List<String> cities = new ArrayList<String>();
 
     @PostConstruct
     public void init() {
-        
+
     }
 
     public Pruebas() throws Exception {
-  
+
     }
 
     public static List<String> listarResp() throws Exception {
-        cities=EmpresaImpl.listarPrueba();
+        cities = EmpresaImpl.listarPrueba();
         return cities;
     }
-    
+
 //    public static List<String> listarPrueba() throws Exception {
 ////        List<String> cities2 = new ArrayList<>();
 //        cities.add("Miami");
@@ -39,14 +38,17 @@ public class Pruebas {
 //        cities.add("Amsterdam"); 
 //        return cities;
 //    }
-
     public static void main(String[] args) throws Exception {
 //        listarPrueba();
-        listarResp();   
-        System.out.println("La lista es ");
-        System.out.println(cities.size());
-        for(int i=0;i<cities.size();i++){
-            System.out.println(cities.get(i));
-        }
+//        listarResp();   
+//        System.out.println("La lista es ");
+//        System.out.println(cities.size());
+//        for(int i=0;i<cities.size();i++){
+//            System.out.println(cities.get(i));
+//        }
+        EmpresaC control = new EmpresaC();
+        System.out.println("Aqui quiero imprimir");
+//        control.getCodResp("CAMPOS CASTILLO FLAVIO ALEXANDER");
+        System.out.println(control.getCodResp("CAMPOS CASTILLO FLAVIO ALEXANDER"));
     }
 }

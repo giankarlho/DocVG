@@ -4,53 +4,39 @@ import dao.EmpresaImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
 @ManagedBean
 public class CheckboxView {
 
-    EmpresaImpl resp;
-    private String[] selectedCities;
-    private List<String> cities;
-
-    @PostConstruct
-    public void init() {
-        
-//        cities.add("Miami");
-//        cities.add("London");
-//        cities.add("Paris");
-//        cities.add("Istanbul");
-//        cities.add("Berlin");
-//        cities.add("Barcelona");
-//        cities.add("Rome");
-//        cities.add("Brasilia");
-//        cities.add("Amsterdam");  
-    }
+    EmpresaImpl dao;
+    private String[] selectedResp;
+    private List<String> responsables;
 
     public CheckboxView() throws Exception {
-        cities = new ArrayList<String>();
+        responsables = new ArrayList<String>();
         listarResp();
     }
 
     public List<String> listarResp() throws SQLException, Exception {
-        cities = EmpresaImpl.listarPrueba();
-        return cities;
+        dao = new EmpresaImpl();
+        responsables = dao.listarResp();
+        return responsables;
     }
 
-    public String[] getSelectedCities() {
-        return selectedCities;
+    public List<String> getResponsables() {
+        return responsables;
     }
 
-    public void setSelectedCities(String[] selectedCities) {
-        this.selectedCities = selectedCities;
+    public void setResponsables(List<String> responsables) {
+        this.responsables = responsables;
     }
 
-    public List<String> getCities() {
-        return cities;
+    public String[] getSelectedResp() {
+        return selectedResp;
     }
 
-    public void setCities(List<String> cities) {
-        this.cities = cities;
+    public void setSelectedResp(String[] selectedResp) {
+        this.selectedResp = selectedResp;
     }
 }

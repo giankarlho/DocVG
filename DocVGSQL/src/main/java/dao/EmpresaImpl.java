@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import model.Empresa;
+import model.Persona;
 
 public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
 
@@ -34,6 +36,28 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         }
     }
 
+     public void registrarDet(Empresa empresa, Persona persona) throws Exception {
+        try {
+            Date fecha = Date.valueOf("10/09/2019");
+            this.Conexion();
+            String sql = "insert into detEmpresa (IDEMP,IDPER,CARPER,ESTASI,FECASI)"
+                    + "values (?,?,?,?,?)";
+            PreparedStatement ps = this.getCn().prepareStatement(sql);
+            ps.setInt(1, empresa.getIDEMP());
+            ps.setInt(2, persona.getIDPER());
+            ps.setString(3, "Administrador");
+            ps.setString(4, "A");
+            ps.setDate(5,fecha);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Error en registrarAlumno " + e.getMessage());
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+    }
+     
     @Override
     public void modificar(Empresa empresa) throws Exception {
         try {
@@ -143,11 +167,11 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         List<String> resp = new ArrayList<>();
         try {
             this.Conexion();
-            String sql = "select top 10 NOMPER from persona where TIPPER='E'";            
+            String sql = "SELECT TOP 10 (NOMPER + ' ' + APEPER) AS NOMBRE  FROM Persona where TIPPER='A'";            
             Statement st = this.getCn().createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                resp.add(rs.getString("NOMPER"));
+                resp.add(rs.getString("NOMBRE"));
             }
             rs.close();
             st.close();
@@ -156,6 +180,23 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             throw e;
         } finally {
             this.Cerrar();
+        }
+    }
+    
+     public Integer getCodResp(String responsable) throws SQLException  {
+        this.Conexion();
+        ResultSet rs;
+        try {
+            String sql = "SELECT IDPER FROM persona WHERE (NOMPER + ' ' + APEPER) = ?";
+            PreparedStatement ps = this.getCn().prepareStatement(sql);
+            ps.setString(1, responsable);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("IDPER");                
+            }
+            return null;
+        } catch (SQLException e) {
+            throw e;
         }
     }
 
