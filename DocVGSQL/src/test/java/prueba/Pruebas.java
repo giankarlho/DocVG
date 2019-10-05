@@ -1,8 +1,10 @@
 package prueba;
 
-import controlador.EmpresaC;
 import dao.EmpresaImpl;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
@@ -46,9 +48,17 @@ public class Pruebas {
 //        for(int i=0;i<cities.size();i++){
 //            System.out.println(cities.get(i));
 //        }
-        EmpresaC control = new EmpresaC();
-        System.out.println("Aqui quiero imprimir");
-//        control.getCodResp("CAMPOS CASTILLO FLAVIO ALEXANDER");
-        System.out.println(control.getCodResp("CAMPOS CASTILLO FLAVIO ALEXANDER"));
+//        EmpresaC control = new EmpresaC();
+//        System.out.println("Aqui quiero imprimir");
+////        control.getCodResp("CAMPOS CASTILLO FLAVIO ALEXANDER");
+//        System.out.println(control.getCodResp("CAMPOS CASTILLO FLAVIO ALEXANDER"));
+
+//        Date fecha = new Date();
+//        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+//        System.out.println("Fecha: " + dateFormat.format(fecha));
+//        System.out.println("Esta es la fecha del sistema: " + fecha);
+            EmpresaImpl daoEmp = new EmpresaImpl();
+            System.out.println("El último código es: " + daoEmp.getCodEmp());
+                    
     }
 }

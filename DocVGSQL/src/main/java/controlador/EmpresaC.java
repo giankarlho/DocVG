@@ -28,9 +28,8 @@ public class EmpresaC implements Serializable {
     private String[] selectedResp;
     private List<String> responsables;
 
-
     public EmpresaC() throws Exception {
-        responsables = new ArrayList<String>(); 
+        responsables = new ArrayList<String>();
         empresa = new Empresa();
         select = new Empresa();
         listadoEmp = new ArrayList<>();
@@ -42,10 +41,12 @@ public class EmpresaC implements Serializable {
             dao = new EmpresaImpl();
             persona = new Persona();
             empresa.setCODUBI(dao.getCodUbigeo(empresa.getCODUBI()));
-            for (int i = 1; i < selectedResp.length; i++) {
+            dao.registrar(empresa);
+            empresa.setIDEMP(dao.getCodEmp());
+            for (int i = 0; i < selectedResp.length; i++) {
+                persona.setIDPER(getCodResp(selectedResp[i]));
                 dao.registrarDet(empresa, persona);
             }
-            dao.registrar(empresa);
             limpiar();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro", "Completado..."));
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class EmpresaC implements Serializable {
         for (int i = 0; i < selectedResp.length; i++) {
             System.out.println(selectedResp[i]);
         }
-        
+
     }
 
     public Integer getCodResp(String nombre) throws Exception {
@@ -81,6 +82,8 @@ public class EmpresaC implements Serializable {
     public void limpiar() throws Exception {
         try {
             empresa = new Empresa();
+            responsables = new ArrayList<String>();
+            String[] selectedResp;
         } catch (Exception e) {
             throw e;
         }

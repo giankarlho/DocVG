@@ -1,11 +1,13 @@
 package dao;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import model.Empresa;
 import model.Persona;
@@ -36,9 +38,11 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         }
     }
 
-     public void registrarDet(Empresa empresa, Persona persona) throws Exception {
+    public void registrarDet(Empresa empresa, Persona persona) throws Exception {
         try {
-            Date fecha = Date.valueOf("10/09/2019");
+            Date fecha = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            System.out.println("Fecha: " + dateFormat.format(fecha));
             this.Conexion();
             String sql = "insert into detEmpresa (IDEMP,IDPER,CARPER,ESTASI,FECASI)"
                     + "values (?,?,?,?,?)";
@@ -47,7 +51,7 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             ps.setInt(2, persona.getIDPER());
             ps.setString(3, "Administrador");
             ps.setString(4, "A");
-            ps.setDate(5,fecha);
+            ps.setString(5, dateFormat.format(fecha));
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -57,7 +61,7 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             this.Cerrar();
         }
     }
-     
+
     @Override
     public void modificar(Empresa empresa) throws Exception {
         try {
@@ -143,6 +147,42 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             throw e;
         }
     }
+    
+    public Integer getCodEmp() throws SQLException{
+        this.Conexion();
+        int codigo =0 ;
+        try {
+            String sql = "select max(IDEMP) as CODEND from empresa";
+            Statement st = this.getCn().createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                codigo= Integer.parseInt(rs.getString("CODEND"));
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            throw e;
+        }
+        return codigo;
+    }
+    
+
+    public Integer getCodResp(String responsable) throws SQLException {
+        this.Conexion();
+        ResultSet rs;
+        try {
+            String sql = "SELECT IDPER FROM persona WHERE (NOMPER + ' ' + APEPER) = ?";
+            PreparedStatement ps = this.getCn().prepareStatement(sql);
+            ps.setString(1, responsable);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("IDPER");
+            }
+            return null;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
 
     public List<String> listarUbigeo(String Consulta) throws SQLException {
         this.Conexion();
@@ -167,7 +207,7 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         List<String> resp = new ArrayList<>();
         try {
             this.Conexion();
-            String sql = "SELECT TOP 10 (NOMPER + ' ' + APEPER) AS NOMBRE  FROM Persona where TIPPER='A'";            
+            String sql = "SELECT TOP 10 (NOMPER + ' ' + APEPER) AS NOMBRE  FROM Persona where TIPPER='A'";
             Statement st = this.getCn().createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -180,23 +220,6 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             throw e;
         } finally {
             this.Cerrar();
-        }
-    }
-    
-     public Integer getCodResp(String responsable) throws SQLException  {
-        this.Conexion();
-        ResultSet rs;
-        try {
-            String sql = "SELECT IDPER FROM persona WHERE (NOMPER + ' ' + APEPER) = ?";
-            PreparedStatement ps = this.getCn().prepareStatement(sql);
-            ps.setString(1, responsable);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("IDPER");                
-            }
-            return null;
-        } catch (SQLException e) {
-            throw e;
         }
     }
 
