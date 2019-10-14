@@ -15,60 +15,113 @@
                 <h1 style="margin-top:0">Registrar Empresa</h1>
                 <p:panelGrid columns="4">
                     <p:outputLabel value="Razon Social"/>
-                    <p:inputText value="#{empresaC.empresa.RAZEMP}" maxlength="50" required="true" requiredMessage="Se reqiuere la razon social">
+                    <p:inputText value="#{empresaC.emp.RAZEMP}" maxlength="50" required="true" requiredMessage="Se reqiuere la razon social">
                         <p:keyFilter regEx="/[A-Z_a-z_ñ _á_é_í_ó_ú]/"/>
                     </p:inputText>
                     <p:outputLabel value="Razon Comercial"/>
-                    <p:inputText value="#{empresaC.empresa.COMEMP}" maxlength="50">
+                    <p:inputText value="#{empresaC.emp.COMEMP}" maxlength="50">
                         <p:keyFilter regEx="/[A-Z_a-z_ñ _á_é_í_ó_ú]/"/>
                     </p:inputText>
                     <p:outputLabel value="Direccion"/>
-                    <p:inputText value="#{empresaC.empresa.DIREMP}" maxlength="50">
+                    <p:inputText value="#{empresaC.emp.DIREMP}" maxlength="50">
                     </p:inputText>
                     <p:outputLabel value="RUC"/>
-                    <p:inputText value="#{empresaC.empresa.RUCEMP}" maxlength="11" required="true" requiredMessage="Se reqiuere el ruc">
+                    <p:inputText value="#{empresaC.emp.RUCEMP}" maxlength="11" required="true" requiredMessage="Se reqiuere el ruc">
                         <p:keyFilter regEx="/[0-9]/"/>
                     </p:inputText>
                     <p:outputLabel value="Distrito"  />
-                    <p:autoComplete  value="#{empresaC.empresa.CODUBI}" completeMethod="#{empresaC.listarUbigeo}" />
+                    <p:autoComplete  value="#{empresaC.emp.CODUBI}" completeMethod="#{empresaC.listarUbigeo}" />
                     <p:outputLabel value="Teléfono" />
-                    <p:inputText value="#{empresaC.empresa.TELEMP}" maxlength="20">
+                    <p:inputText value="#{empresaC.emp.TELEMP}" maxlength="20">
                         <p:keyFilter regEx="/[0-9]/"/>
                     </p:inputText>
                 </p:panelGrid>
-            </h:form>
-            <h:form>
-                <h:panelGrid columns="2" cellpadding="5"> 
-                    <h:outputLabel for="multiple" value="Multiple:" />
-                    <p:selectCheckboxMenu id="multiple" value="#{empresaC.selectedResp}" label="Cities" multiple="true"
-                                          filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+
+                <h:panelGrid columns="2" cellpadding="5" > 
+                    <h:outputLabel for="multiple" value="Responsable(s):" />
+                    <p:selectCheckboxMenu id="multiple" value="#{empresaC.selectedResp}" label="Responsables" multiple="true"
+                                          filter="true" filterMatchMode="startsWith" panelStyle="width:400px" widgetVar="var">
                         <f:selectItems value="#{empresaC.responsables}" />
                     </p:selectCheckboxMenu>  
-
                 </h:panelGrid>
+                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns multiple formTable"/> 
+                <p:commandButton value="Limpiar" actionListener="#{empresaC.limpiar()}" update="@widgetVar(var) " /> 
+                <p:commandButton value="Ver Selección" update="displayItems" oncomplete="PF('itemDialog').show()" style="margin-top:10px;" />
 
-                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns multiple"/> 
-                <p:commandButton value="Escogidos" actionListener="#{empresaC.verEscogidos()}" /> 
-
-                <p:commandButton value="Submit" update="displayItems" oncomplete="PF('itemDialog').show()" style="margin-top:10px;" />
-
-                <p:dialog header="Selected Items" modal="true" showEffect="fade" hideEffect="fade" widgetVar="itemDialog" width="250">
+                <p:dialog header="Items Seleccionados" modal="true" showEffect="fade" hideEffect="fade" widgetVar="itemDialog" width="450">
                     <p:outputPanel id="displayItems">
-
-                        <p:dataList value="#{empresaC.selectedResp}" var="city" emptyMessage="No cities selected" style="margin-bottom: 10px;">
+                        <p:dataList value="#{empresaC.selectedResp}" var="respon" emptyMessage="No se seleccionó a nadie" style="margin-bottom: 10px;">
                             <f:facet name="header">
                                 Multiple
                             </f:facet>
-                            #{city}
+                            #{respon}
                         </p:dataList>
-
                     </p:outputPanel>
                 </p:dialog>
             </h:form>
-        </center>
+        </center>  
+        <p:spacer/>
+        <h:form id="formTable">
+            <p:dataTable value="#{empresaC.listadoEmp}" 
+                         var="lista" 
+                         id="dtTable"
+                         selectionMode="single"
+                         selection="#{empresaC.select}" rowKey="#{lista.IDEMP}"
+                         rows="5"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"
+                         >
 
+                <f:facet name="header">
+                    EMPRESAS
+                </f:facet>
 
+                <p:column headerText="RUC" filterBy="#{lista.RUCEMP}" filterMatchMode="contains" style="width: 110px">
+                    <center>
+                        <h:outputText value="#{lista.RUCEMP}" />
+                    </center>
+                </p:column>
+                <p:column headerText="Razon Social"  filterBy="#{lista.RAZEMP}" filterMatchMode="contains">
+                    <center>
+                        <h:outputText value="#{lista.RAZEMP}" />
+                    </center>
+                </p:column>
+                <p:column headerText="Razón Comercial" >
+                    <center>
+                        <h:outputText value="#{lista.COMEMP}" />
+                    </center>
+                </p:column>
+                <p:column headerText="Direccion" >
+                    <center>
+                        <h:outputText value="#{lista.DIREMP}" />
+                    </center>
+                </p:column>
+                <p:column headerText="Distrito" >
+                    <center>
+                        <h:outputText value="#{lista.CODUBI}" />
+                    </center>
+                </p:column>
+                <p:column headerText="Teléfono" >
+                    <center>
+                        <h:outputText value="#{lista.TELEMP}" />
+                    </center>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="formResp">
+            <p:dataTable value="#{empresaC.listadoRespxEmp}" 
+                         var="resp" 
+                         id="dtTableResp">
+                <f:facet name="header">
+                    Responsables
+                </f:facet>
 
+               
+
+  
+                </p:dataTable>
+        </h:form>
     </h:body>
 </html>
 

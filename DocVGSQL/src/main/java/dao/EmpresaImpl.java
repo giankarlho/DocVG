@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.DetEmpresa;
 import model.Empresa;
 import model.Persona;
 
@@ -31,7 +32,7 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            System.out.println("Error en registrarAlumno " + e.getMessage());
+            System.out.println("Error en registrarEmpresa " + e.getMessage());
             throw e;
         } finally {
             this.Cerrar();
@@ -42,7 +43,7 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         try {
             Date fecha = new Date();
             DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            System.out.println("Fecha: " + dateFormat.format(fecha));
+//            System.out.println("Fecha: " + dateFormat.format(fecha));
             this.Conexion();
             String sql = "insert into detEmpresa (IDEMP,IDPER,CARPER,ESTASI,FECASI)"
                     + "values (?,?,?,?,?)";
@@ -103,11 +104,13 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
 
     @Override
     public List<Empresa> listar() throws Exception {
+        Date fecha = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         List<Empresa> listado;
         Empresa empr;
         try {
             this.Conexion();
-            String sql = "SELECT * FROM VW_EMPRESA where ESTEMP='A'";
+            String sql = "SELECT * FROM EMPRESA where ESTEMP='A' order by IDEMP desc";
             listado = new ArrayList();
             Statement st = this.getCn().createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -115,9 +118,11 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
                 empr = new Empresa();
                 empr.setIDEMP(rs.getInt("IDEMP"));
                 empr.setRAZEMP(rs.getString("RAZEMP"));
+                empr.setCOMEMP(rs.getString("COMEMP"));
                 empr.setDIREMP(rs.getString("DIREMP"));
                 empr.setRUCEMP(rs.getString("RUCEMP"));
                 empr.setESTEMP(rs.getString("ESTEMP"));
+                empr.setTELEMP(rs.getString("TELEMP"));
                 empr.setCODUBI(rs.getString("CODUBI"));
                 listado.add(empr);
             }
@@ -131,13 +136,41 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         return listado;
     }
 
-    public String getCodUbigeo(String Empresa) throws SQLException, Exception {
+    public List<DetEmpresa> listarRespxEmp(Empresa empresa) throws Exception {
+        List<DetEmpresa> listado;
+        DetEmpresa detEmp;
+        try {
+            this.Conexion();
+            String sql = "SELECT * FROM detEmpresa where IDEMP=?";
+            listado = new ArrayList();
+            PreparedStatement ps = this.getCn().prepareCall(sql);
+            ps.setInt(1, empresa.getIDEMP());
+            ResultSet rs = ps.executeQuery(sql);
+            while (rs.next()) {
+                detEmp = new DetEmpresa();
+                detEmp.setIDEMP(rs.getInt("IDEMP"));
+                detEmp.setIDPER(rs.getInt("IDPER"));
+                detEmp.setESTASI('A');
+                detEmp.setFECASI(rs.getDate("FECASI"));
+                listado.add(detEmp);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return listado;
+    }
+
+    public String getCodUbigeo(String DistProvDpto) throws SQLException, Exception {
         this.Conexion();
         ResultSet rs;
         try {
             String sql = "SELECT CODUBI FROM UBIGEO WHERE CONCAT(DPTUBI,', ',PROUBI,', ',DISUBI) LIKE ?;";
             PreparedStatement ps = this.getCn().prepareCall(sql);
-            ps.setString(1, Empresa);
+            ps.setString(1, DistProvDpto);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getString("CODUBI");
@@ -147,16 +180,16 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
             throw e;
         }
     }
-    
-    public Integer getCodEmp() throws SQLException{
+
+    public Integer getCodEmp() throws SQLException {
         this.Conexion();
-        int codigo =0 ;
+        int codigo = 0;
         try {
             String sql = "select max(IDEMP) as CODEND from empresa";
             Statement st = this.getCn().createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                codigo= Integer.parseInt(rs.getString("CODEND"));
+                codigo = Integer.parseInt(rs.getString("CODEND"));
             }
             rs.close();
             st.close();
@@ -165,7 +198,6 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         }
         return codigo;
     }
-    
 
     public Integer getCodResp(String responsable) throws SQLException {
         this.Conexion();
@@ -184,18 +216,18 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         }
     }
 
-    public List<String> listarUbigeo(String Consulta) throws SQLException {
+    public List<String> listarUbigeo(String consulta) throws SQLException {
         this.Conexion();
         ResultSet rs;
         List<String> lista;
         try {
-            String sql = "select top 10 CONCAT(DISUBI ,', ',PROUBI,', ',DPTUBI) AS UBIGEO from UBIGEO WHERE DISUBI LIKE ?";
+            String sql = "select top 10 CONCAT(DPTUBI,', ',PROUBI,', ',DISUBI) AS ubigeo from UBIGEO WHERE DISUBI LIKE ?";
             PreparedStatement ps = this.getCn().prepareCall(sql);
-            ps.setString(1, "%" + Consulta + "%");
+            ps.setString(1, "%" + consulta + "%");
             lista = new ArrayList<>();
             rs = ps.executeQuery();
             while (rs.next()) {
-                lista.add(rs.getString("UBIGEO"));
+                lista.add(rs.getString("ubigeo"));
             }
             return lista;
         } catch (SQLException e) {

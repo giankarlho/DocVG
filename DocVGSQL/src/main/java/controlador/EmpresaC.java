@@ -1,52 +1,57 @@
 package controlador;
 
-import java.util.Map;
-import java.util.HashMap;
-import reports.report;
 import dao.EmpresaImpl;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import model.DetEmpresa;
 import model.Empresa;
 import model.Persona;
 
-@ManagedBean
+@Named(value = "empresaC")
+@SessionScoped
 public class EmpresaC implements Serializable {
 
-    private EmpresaImpl dao;
-    private Empresa empresa;
     private Persona persona;
+    private EmpresaImpl dao;
+    private Empresa emp = new Empresa();
     private Empresa select;
     private List<Empresa> listadoEmp;
-    private String[] selectedResp;
+    private List<String> selectedResp;
     private List<String> responsables;
+    private List<DetEmpresa> persxEmp;
 
     public EmpresaC() throws Exception {
         responsables = new ArrayList<String>();
-        empresa = new Empresa();
         select = new Empresa();
         listadoEmp = new ArrayList<>();
+
         listarResp();
+        listar();
     }
 
     public void registrar() throws Exception {
         try {
+//            mostrar();
             dao = new EmpresaImpl();
             persona = new Persona();
-            empresa.setCODUBI(dao.getCodUbigeo(empresa.getCODUBI()));
-            dao.registrar(empresa);
-            empresa.setIDEMP(dao.getCodEmp());
-            for (int i = 0; i < selectedResp.length; i++) {
-                persona.setIDPER(getCodResp(selectedResp[i]));
-                dao.registrarDet(empresa, persona);
+            emp.setCODUBI(dao.getCodUbigeo(emp.getCODUBI()));
+            dao.registrar(emp);
+            emp.setIDEMP(dao.getCodEmp());
+//            for (int i = 0; i < selectedResp.length; i++) {
+//                persona.setIDPER(getCodResp(selectedResp[i]));
+//                dao.registrarDet(empresa, persona);
+//            }
+            for (String strTemp : selectedResp) {
+                persona.setIDPER(getCodResp(strTemp));
+                dao.registrarDet(emp, persona);
             }
+
             limpiar();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro", "Completado..."));
         } catch (Exception e) {
@@ -54,12 +59,21 @@ public class EmpresaC implements Serializable {
         }
     }
 
+//    public void mostrar() {
+//        System.out.println("código: " + emp.getCODUBI());
+//        System.out.println("razón: " + emp.getRAZEMP());
+//        System.out.println("comercial: " + emp.getCOMEMP());
+//        System.out.println("dirección: " + emp.getDIREMP());
+//        System.out.println("estado: " + emp.getESTEMP());
+//        System.out.println("telefono: " + emp.getTELEMP());
+//        System.out.println("ruc: " + emp.getRUCEMP());
+//    }
+
     public void verEscogidos() throws Exception {
         System.out.println("Estos son los elegidos");
-        for (int i = 0; i < selectedResp.length; i++) {
-            System.out.println(selectedResp[i]);
+        for (int i = 0; i < selectedResp.size(); i++) {
+            System.out.println(selectedResp.get(i));
         }
-
     }
 
     public Integer getCodResp(String nombre) throws Exception {
@@ -79,14 +93,50 @@ public class EmpresaC implements Serializable {
         return responsables;
     }
 
-    public void limpiar() throws Exception {
+    public void listadoRespxEmp() throws Exception {
+        persxEmp = new ArrayList<>();
         try {
-            empresa = new Empresa();
-            responsables = new ArrayList<String>();
-            String[] selectedResp;
+            dao = new EmpresaImpl();
+            persxEmp = dao.listarRespxEmp(emp);
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public void limpiar() throws Exception {
+        try {
+            emp = new Empresa();
+            selectedResp.clear();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void listar() throws Exception {
+        EmpresaImpl dao;
+        try {
+            dao = new EmpresaImpl();
+            listadoEmp = dao.listar();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+//    public void refresh() {
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        Application application = context.getApplication();
+//        ViewHandler viewHandler = application.getViewHandler();
+//        UIViewRoot viewRoot = viewHandler.createView(context, context
+//                .getViewRoot().getViewId());
+//        context.setViewRoot(viewRoot);
+//        context.renderResponse();
+//    }
+
+    public Empresa getEmp() {
+        return emp;
+    }
+
+    public void setEmp(Empresa emp) {
+        this.emp = emp;
     }
 
     public Empresa getSelect() {
@@ -105,35 +155,27 @@ public class EmpresaC implements Serializable {
         this.listadoEmp = listadoEmp;
     }
 
-    public String[] getSelectedResp() {
+    public List<String> getSelectedResp() {
         return selectedResp;
     }
 
-    public void setSelectedResp(String[] selectedResp) {
+    public void setSelectedResp(List<String> selectedResp) {
         this.selectedResp = selectedResp;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
     }
 
     public List<String> getResponsables() {
         return responsables;
     }
 
-    public void setResponsables(List<String> responsables) {
-        this.responsables = responsables;
+//    public void setResponsables(List<String> responsables) {
+//        this.responsables = responsables;
+//    } 
+    public List<DetEmpresa> getPersxEmp() {
+        return persxEmp;
     }
 
-//    public List<String> getSelectedResp() {
-//        return selectedResp;
-//    }
-//
-//    public void setSelectedResp(List<String> selectedResp) {
-//        this.selectedResp = selectedResp;
-//    }
+    public void setPersxEmp(List<DetEmpresa> persxEmp) {
+        this.persxEmp = persxEmp;
+    }
+
 }
