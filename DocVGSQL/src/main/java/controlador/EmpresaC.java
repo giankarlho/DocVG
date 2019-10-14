@@ -12,11 +12,14 @@ import javax.inject.Named;
 import model.DetEmpresa;
 import model.Empresa;
 import model.Persona;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 @Named(value = "empresaC")
 @SessionScoped
 public class EmpresaC implements Serializable {
 
+    private DetEmpresa detEmp;
     private Persona persona;
     private EmpresaImpl dao;
     private Empresa emp = new Empresa();
@@ -27,10 +30,9 @@ public class EmpresaC implements Serializable {
     private List<DetEmpresa> persxEmp;
 
     public EmpresaC() throws Exception {
-        responsables = new ArrayList<String>();
+        responsables = new ArrayList<>();
         select = new Empresa();
         listadoEmp = new ArrayList<>();
-
         listarResp();
         listar();
     }
@@ -59,20 +61,10 @@ public class EmpresaC implements Serializable {
         }
     }
 
-//    public void mostrar() {
-//        System.out.println("código: " + emp.getCODUBI());
-//        System.out.println("razón: " + emp.getRAZEMP());
-//        System.out.println("comercial: " + emp.getCOMEMP());
-//        System.out.println("dirección: " + emp.getDIREMP());
-//        System.out.println("estado: " + emp.getESTEMP());
-//        System.out.println("telefono: " + emp.getTELEMP());
-//        System.out.println("ruc: " + emp.getRUCEMP());
-//    }
-
     public void verEscogidos() throws Exception {
         System.out.println("Estos son los elegidos");
-        for (int i = 0; i < selectedResp.size(); i++) {
-            System.out.println(selectedResp.get(i));
+        for (String strTemp : selectedResp) {
+            System.out.println(getCodResp(strTemp));
         }
     }
 
@@ -131,6 +123,43 @@ public class EmpresaC implements Serializable {
 //        context.renderResponse();
 //    }
 
+    
+    public void onRowSelect(SelectEvent event) throws Exception {
+         persxEmp = new ArrayList<>();
+        try {
+            dao = new EmpresaImpl();
+            persxEmp = dao.listarRespxEmp((Empresa) event.getObject());
+            System.out.println("Que pasa aqui: " + (Empresa) event.getObject());
+        } catch (Exception e) {
+            throw e;
+        }
+//        FacesMessage msg = new FacesMessage("Empresa seleccionada", ((Empresa) event.getObject()).getRAZEMP());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+// 
+    public void onRowUnselect(UnselectEvent event) throws Exception {
+         persxEmp = new ArrayList<>();
+        try {
+            dao = new EmpresaImpl();
+            persxEmp = dao.listarRespxEmp((Empresa) event.getObject());
+        } catch (Exception e) {
+            throw e;
+        }
+//        FacesMessage msg = new FacesMessage("Empresa Unselected", ((Empresa) event.getObject()).getRAZEMP());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    //    public void mostrar() {
+//        System.out.println("código: " + emp.getCODUBI());
+//        System.out.println("razón: " + emp.getRAZEMP());
+//        System.out.println("comercial: " + emp.getCOMEMP());
+//        System.out.println("dirección: " + emp.getDIREMP());
+//        System.out.println("estado: " + emp.getESTEMP());
+//        System.out.println("telefono: " + emp.getTELEMP());
+//        System.out.println("ruc: " + emp.getRUCEMP());
+//    }
+    
+    // Getter & Setter
     public Empresa getEmp() {
         return emp;
     }
@@ -167,9 +196,6 @@ public class EmpresaC implements Serializable {
         return responsables;
     }
 
-//    public void setResponsables(List<String> responsables) {
-//        this.responsables = responsables;
-//    } 
     public List<DetEmpresa> getPersxEmp() {
         return persxEmp;
     }
@@ -179,3 +205,9 @@ public class EmpresaC implements Serializable {
     }
 
 }
+
+
+
+//    public void setResponsables(List<String> responsables) {
+//        this.responsables = responsables;
+//    } 

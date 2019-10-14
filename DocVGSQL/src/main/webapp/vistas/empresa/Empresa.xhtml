@@ -9,9 +9,11 @@
     </h:head>
     <h:body>
         <!--IDEMP RAZEMP     COMEMP  RUCEMP ESTEMP DIREMP CODUBI TELEMP-->
-        <p:growl showDetail="true" id="messages" />
+
         <center>
-            <h:form id="formIns">
+            <p:growl id="msgs" showDetail="true" life="1000"/>
+            <h:form id="formIns">              
+
                 <h1 style="margin-top:0">Registrar Empresa</h1>
                 <p:panelGrid columns="4">
                     <p:outputLabel value="Razon Social"/>
@@ -44,9 +46,9 @@
                         <f:selectItems value="#{empresaC.responsables}" />
                     </p:selectCheckboxMenu>  
                 </h:panelGrid>
-                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns multiple formTable"/> 
-                <p:commandButton value="Limpiar" actionListener="#{empresaC.limpiar()}" update="@widgetVar(var) " /> 
-                <p:commandButton value="Ver Selección" update="displayItems" oncomplete="PF('itemDialog').show()" style="margin-top:10px;" />
+                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns multiple :formTable"/> 
+                <p:commandButton value="Limpiar" actionListener="#{empresaC.limpiar()}" update="multiple" /> 
+                <p:commandButton value="Ver Selección" update="displayItems" actionListener="#{empresaC.verEscogidos()}" oncomplete="PF('itemDialog').show()" style="margin-top:10px;" />
 
                 <p:dialog header="Items Seleccionados" modal="true" showEffect="fade" hideEffect="fade" widgetVar="itemDialog" width="450">
                     <p:outputPanel id="displayItems">
@@ -72,11 +74,11 @@
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15"
                          >
-
                 <f:facet name="header">
                     EMPRESAS
                 </f:facet>
-
+                <p:ajax event="rowSelect" listener="#{empresaC.onRowSelect}" update=":formIns" />    
+                <p:ajax event="rowUnselect" listener="#{empresaC.onRowUnselect}" update=":formIns" />
                 <p:column headerText="RUC" filterBy="#{lista.RUCEMP}" filterMatchMode="contains" style="width: 110px">
                     <center>
                         <h:outputText value="#{lista.RUCEMP}" />
@@ -93,34 +95,27 @@
                     </center>
                 </p:column>
                 <p:column headerText="Direccion" >
-                    <center>
-                        <h:outputText value="#{lista.DIREMP}" />
-                    </center>
+                    <h:outputText value="#{lista.DIREMP}" />
                 </p:column>
                 <p:column headerText="Distrito" >
-                    <center>
-                        <h:outputText value="#{lista.CODUBI}" />
-                    </center>
+                    <h:outputText value="#{lista.CODUBI}" />
                 </p:column>
                 <p:column headerText="Teléfono" >
                     <center>
                         <h:outputText value="#{lista.TELEMP}" />
                     </center>
                 </p:column>
-            </p:dataTable>
+            </p:dataTable>  
         </h:form>
-        <h:form id="formResp">
-            <p:dataTable value="#{empresaC.listadoRespxEmp}" 
-                         var="resp" 
-                         id="dtTableResp">
-                <f:facet name="header">
-                    Responsables
-                </f:facet>
-
-               
-
-  
-                </p:dataTable>
+        <h:form id="frmResp">
+            <p:dataTable value="#{empresaC.persxEmp}" var="resp">
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{resp.IDEMP}" />
+                </p:column>
+                <p:column headerText="Cargo">
+                    <h:outputText value="#{resp.FECASI}" />
+                </p:column>
+            </p:dataTable>
         </h:form>
     </h:body>
 </html>
