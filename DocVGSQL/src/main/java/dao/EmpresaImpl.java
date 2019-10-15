@@ -137,20 +137,19 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
     }
 
     public List<DetEmpresa> listarRespxEmp(Empresa empresa) throws Exception {
-        List<DetEmpresa> listado;
+        List<DetEmpresa>  listado = new ArrayList();
         DetEmpresa detEmp;
         try {
             this.Conexion();
-            String sql = "SELECT * FROM detEmpresa where IDEMP=?";
-            listado = new ArrayList();
-            PreparedStatement ps = this.getCn().prepareCall(sql);
+            String sql = "SELECT (NOMPER + ' ' + APEPER) as nombre, CARPER,ESTASI, FECASI  FROM detEmpresa d inner join persona p on d.IDPER=p.IDPER where IDEMP=?";
+            PreparedStatement ps = this.getCn().prepareStatement(sql);
             ps.setInt(1, empresa.getIDEMP());
-            ResultSet rs = ps.executeQuery(sql);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 detEmp = new DetEmpresa();
-                detEmp.setIDEMP(rs.getInt("IDEMP"));
-                detEmp.setIDPER(rs.getInt("IDPER"));
-                detEmp.setESTASI('A');
+                detEmp.setNOMPER(rs.getString("nombre"));
+                detEmp.setCARPER(rs.getString("CARPER"));
+                detEmp.setESTASI(rs.getString("ESTASI"));
                 detEmp.setFECASI(rs.getDate("FECASI"));
                 listado.add(detEmp);
             }
@@ -253,22 +252,6 @@ public class EmpresaImpl extends Conexion implements ICRUD<Empresa> {
         } finally {
             this.Cerrar();
         }
-    }
-
-    public static List<String> listarPrueba() throws Exception {
-        List<String> cities = new ArrayList<>();
-        cities.add("Miami");
-        cities.add("London");
-        cities.add("Paris");
-        cities.add("Istanbul");
-        cities.add("Berlin");
-        cities.add("Barcelona");
-        cities.add("Rome");
-        cities.add("Brasilia");
-        cities.add("Amsterdam");
-        cities.add("Peru");
-        cities.add("San vicente");
-        return cities;
     }
 
 //    public String obtenerCodigoResponsable(String Responsable) throws SQLException, Exception {

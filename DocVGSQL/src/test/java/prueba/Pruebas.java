@@ -1,17 +1,12 @@
 package prueba;
 
 import dao.EmpresaImpl;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
 public class Pruebas {
 
     public static String[] selectedCities;
-    public static List<String> cities = new ArrayList<String>();
 
     @PostConstruct
     public void init() {
@@ -22,10 +17,6 @@ public class Pruebas {
 
     }
 
-    public static List<String> listarResp() throws Exception {
-        cities = EmpresaImpl.listarPrueba();
-        return cities;
-    }
 
 //    public static List<String> listarPrueba() throws Exception {
 ////        List<String> cities2 = new ArrayList<>();

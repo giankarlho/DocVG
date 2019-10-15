@@ -10,6 +10,7 @@ public class Empresa {
     private String DIREMP;
     private String CODUBI;
     private String TELEMP;  
+    private DetEmpresa detEmpresa;
 
     public int getIDEMP() {
         return IDEMP;
@@ -73,6 +74,14 @@ public class Empresa {
 
     public void setTELEMP(String TELEMP) {
         this.TELEMP = TELEMP;
+    }
+
+    public DetEmpresa getDetEmpresa() {
+        return detEmpresa;
+    }
+
+    public void setDetEmpresa(DetEmpresa detEmpresa) {
+        this.detEmpresa = detEmpresa;
     }
 
 }

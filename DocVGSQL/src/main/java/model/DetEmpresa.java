@@ -7,8 +7,11 @@ public class DetEmpresa {
     private int idDEMP;
     private int IDPER;
     private int IDEMP;
-    private char ESTASI;
+    private String NOMPER;
+    private String ESTASI;
+    private String CARPER;
     private Date FECASI;
+
 
     public int getIdDEMP() {
         return idDEMP;
@@ -34,20 +37,36 @@ public class DetEmpresa {
         this.IDEMP = IDEMP;
     }
 
-    public char getESTASI() {
-        return ESTASI;
-    }
-
-    public void setESTASI(char ESTASI) {
-        this.ESTASI = ESTASI;
-    }
-
     public Date getFECASI() {
         return FECASI;
     }
 
     public void setFECASI(Date FECASI) {
         this.FECASI = FECASI;
+    }
+
+    public String getCARPER() {
+        return CARPER;
+    }
+
+    public void setCARPER(String CARPER) {
+        this.CARPER = CARPER;
+    }
+
+    public String getNOMPER() {
+        return NOMPER;
+    }
+
+    public void setNOMPER(String NOMPER) {
+        this.NOMPER = NOMPER;
+    }
+
+    public String getESTASI() {
+        return ESTASI;
+    }
+
+    public void setESTASI(String ESTASI) {
+        this.ESTASI = ESTASI;
     }
 
 }

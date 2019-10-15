@@ -46,8 +46,8 @@
                         <f:selectItems value="#{empresaC.responsables}" />
                     </p:selectCheckboxMenu>  
                 </h:panelGrid>
-                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns multiple :formTable"/> 
-                <p:commandButton value="Limpiar" actionListener="#{empresaC.limpiar()}" update="multiple" /> 
+                <p:commandButton value="Agignar" actionListener="#{empresaC.registrar()}" update="formIns :frmTable"/> 
+                <p:commandButton value="Limpiar" actionListener="#{empresaC.limpiar()}" update="formIns" /> 
                 <p:commandButton value="Ver Selección" update="displayItems" actionListener="#{empresaC.verEscogidos()}" oncomplete="PF('itemDialog').show()" style="margin-top:10px;" />
 
                 <p:dialog header="Items Seleccionados" modal="true" showEffect="fade" hideEffect="fade" widgetVar="itemDialog" width="450">
@@ -60,63 +60,70 @@
                         </p:dataList>
                     </p:outputPanel>
                 </p:dialog>
+                <p />
+            </h:form>
+            <h:form id="frmTable">
+                <p:dataTable var="lista" 
+                             value="#{empresaC.listadoEmp}"                          
+                             id="dtTable"
+                             selectionMode="single"
+                             selection="#{empresaC.select}" rowKey="#{lista.IDEMP}" 
+                             scrollable="true" scrollHeight="150" >
+                    <f:facet name="header">
+                        EMPRESAS
+                    </f:facet>
+                    <p:ajax event="rowSelect" update="frmTable :formDetails" listener="#{empresaC.listadoRespxEmp()}" />    
+
+                    <p:column headerText="RUC" filterBy="#{lista.RUCEMP}" filterMatchMode="contains" style="width: 110px">
+                        <center>
+                            <h:outputText value="#{lista.RUCEMP}" />
+                        </center>
+                    </p:column>
+                    <p:column headerText="Razon Social"  filterBy="#{lista.RAZEMP}" filterMatchMode="contains">
+                        <center>
+                            <h:outputText value="#{lista.RAZEMP}" />
+                        </center>
+                    </p:column>
+                    <p:column headerText="Razón Comercial" >
+                        <center>
+                            <h:outputText value="#{lista.COMEMP}" />
+                        </center>
+                    </p:column>
+                    <p:column headerText="Direccion" >
+                        <h:outputText value="#{lista.DIREMP}" />
+                    </p:column>
+                    <p:column headerText="Distrito" >
+                        <h:outputText value="#{lista.CODUBI}" />
+                    </p:column>
+                    <p:column headerText="Teléfono" >
+                        <center>
+                            <h:outputText value="#{lista.TELEMP}" />
+                        </center>
+                    </p:column>
+                </p:dataTable>  
+
+            </h:form>
+
+            <h:form id="formDetails">
+                <p:dataTable value="#{empresaC.persxEmp}" var="resp">
+                    <f:facet name="header">
+                        Responsable(s) 
+                    </f:facet>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{resp.NOMPER}" />
+                    </p:column>
+                    <p:column headerText="Cargo">
+                        <h:outputText value="#{resp.CARPER}" />
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{resp.ESTASI}" />
+                    </p:column>
+                    <p:column headerText="Fecha Asignación">
+                        <h:outputText value="#{resp.FECASI}" />
+                    </p:column>
+                </p:dataTable>
             </h:form>
         </center>  
-        <p:spacer/>
-        <h:form id="formTable">
-            <p:dataTable value="#{empresaC.listadoEmp}" 
-                         var="lista" 
-                         id="dtTable"
-                         selectionMode="single"
-                         selection="#{empresaC.select}" rowKey="#{lista.IDEMP}"
-                         rows="5"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15"
-                         >
-                <f:facet name="header">
-                    EMPRESAS
-                </f:facet>
-                <p:ajax event="rowSelect" listener="#{empresaC.onRowSelect}" update=":formIns" />    
-                <p:ajax event="rowUnselect" listener="#{empresaC.onRowUnselect}" update=":formIns" />
-                <p:column headerText="RUC" filterBy="#{lista.RUCEMP}" filterMatchMode="contains" style="width: 110px">
-                    <center>
-                        <h:outputText value="#{lista.RUCEMP}" />
-                    </center>
-                </p:column>
-                <p:column headerText="Razon Social"  filterBy="#{lista.RAZEMP}" filterMatchMode="contains">
-                    <center>
-                        <h:outputText value="#{lista.RAZEMP}" />
-                    </center>
-                </p:column>
-                <p:column headerText="Razón Comercial" >
-                    <center>
-                        <h:outputText value="#{lista.COMEMP}" />
-                    </center>
-                </p:column>
-                <p:column headerText="Direccion" >
-                    <h:outputText value="#{lista.DIREMP}" />
-                </p:column>
-                <p:column headerText="Distrito" >
-                    <h:outputText value="#{lista.CODUBI}" />
-                </p:column>
-                <p:column headerText="Teléfono" >
-                    <center>
-                        <h:outputText value="#{lista.TELEMP}" />
-                    </center>
-                </p:column>
-            </p:dataTable>  
-        </h:form>
-        <h:form id="frmResp">
-            <p:dataTable value="#{empresaC.persxEmp}" var="resp">
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{resp.IDEMP}" />
-                </p:column>
-                <p:column headerText="Cargo">
-                    <h:outputText value="#{resp.FECASI}" />
-                </p:column>
-            </p:dataTable>
-        </h:form>
     </h:body>
 </html>
 
