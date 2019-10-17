@@ -12,5 +12,13 @@
             <base-name>/Vista</base-name>
             <var>vista</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/Vista</base-name>
+            <var>vista</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/Vista</base-name>
+            <var>vista</var>
+        </resource-bundle>
     </application>
 </faces-config>
