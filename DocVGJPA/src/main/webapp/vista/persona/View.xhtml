@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PersonaViewDlg" widgetVar="PersonaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{vista.ViewPersonaTitle}">
+            <h:form id="PersonaViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{personaController.selected != null}">
+                        <h:outputText value="#{vista.ViewPersonaLabel_idper}"/>
+                        <h:outputText value="#{personaController.selected.idper}" title="#{vista.ViewPersonaTitle_idper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_nomper}"/>
+                        <h:outputText value="#{personaController.selected.nomper}" title="#{vista.ViewPersonaTitle_nomper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_apeper}"/>
+                        <h:outputText value="#{personaController.selected.apeper}" title="#{vista.ViewPersonaTitle_apeper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_celper}"/>
+                        <h:outputText value="#{personaController.selected.celper}" title="#{vista.ViewPersonaTitle_celper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_corper}"/>
+                        <h:outputText value="#{personaController.selected.corper}" title="#{vista.ViewPersonaTitle_corper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_dniper}"/>
+                        <h:outputText value="#{personaController.selected.dniper}" title="#{vista.ViewPersonaTitle_dniper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_tipper}"/>
+                        <h:outputText value="#{personaController.selected.tipper}" title="#{vista.ViewPersonaTitle_tipper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_estper}"/>
+                        <h:outputText value="#{personaController.selected.estper}" title="#{vista.ViewPersonaTitle_estper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_dirper}"/>
+                        <h:outputText value="#{personaController.selected.dirper}" title="#{vista.ViewPersonaTitle_dirper}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_codubi}"/>
+                        <h:outputText value="#{personaController.selected.codubi}" title="#{vista.ViewPersonaTitle_codubi}"/>
+                        <h:outputText value="#{vista.ViewPersonaLabel_nacper}"/>
+                        <h:outputText value="#{personaController.selected.nacper}" title="#{vista.ViewPersonaTitle_nacper}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{vista.ViewPersonaLabel_titper}"/>
+                        <h:outputText value="#{personaController.selected.titper}" title="#{vista.ViewPersonaTitle_titper}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{vista.Close}" onclick="PersonaViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

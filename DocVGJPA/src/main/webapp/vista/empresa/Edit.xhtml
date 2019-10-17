@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmpresaEditDlg" widgetVar="EmpresaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{vista.EditEmpresaTitle}">
+            <h:form id="EmpresaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{empresaController.selected != null}">
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_idemp}" for="idemp" />
+                        <p:inputText id="idemp" value="#{empresaController.selected.idemp}" title="#{vista.EditEmpresaTitle_idemp}" required="true" requiredMessage="#{vista.EditEmpresaRequiredMessage_idemp}"/>
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_razemp}" for="razemp" />
+                        <p:inputText id="razemp" value="#{empresaController.selected.razemp}" title="#{vista.EditEmpresaTitle_razemp}" />
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_comemp}" for="comemp" />
+                        <p:inputText id="comemp" value="#{empresaController.selected.comemp}" title="#{vista.EditEmpresaTitle_comemp}" />
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_rucemp}" for="rucemp" />
+                        <p:inputText id="rucemp" value="#{empresaController.selected.rucemp}" title="#{vista.EditEmpresaTitle_rucemp}" />
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_estemp}" for="estemp" />
+                        <p:inputText id="estemp" value="#{empresaController.selected.estemp}" title="#{vista.EditEmpresaTitle_estemp}" />
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_diremp}" for="diremp" />
+                        <p:inputText id="diremp" value="#{empresaController.selected.diremp}" title="#{vista.EditEmpresaTitle_diremp}" />
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_codubi}" for="codubi" />
+                        <p:inputText id="codubi" value="#{empresaController.selected.codubi}" title="#{vista.EditEmpresaTitle_codubi}" />
+                        <p:outputLabel value="#{vista.EditEmpresaLabel_telemp}" for="telemp" />
+                        <p:inputText id="telemp" value="#{empresaController.selected.telemp}" title="#{vista.EditEmpresaTitle_telemp}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{empresaController.update}" value="#{vista.Save}" update="display,:EmpresaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EmpresaEditDialog');"/>
+                    <p:commandButton value="#{vista.Cancel}" onclick="EmpresaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetEmpresaViewDlg" widgetVar="DetEmpresaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{vista.ViewDetEmpresaTitle}">
+            <h:form id="DetEmpresaViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{detEmpresaController.selected != null}">
+                        <h:outputText value="#{vista.ViewDetEmpresaLabel_idDEMP}"/>
+                        <h:outputText value="#{detEmpresaController.selected.idDEMP}" title="#{vista.ViewDetEmpresaTitle_idDEMP}"/>
+                        <h:outputText value="#{vista.ViewDetEmpresaLabel_idemp}"/>
+                        <h:outputText value="#{detEmpresaController.selected.idemp}" title="#{vista.ViewDetEmpresaTitle_idemp}"/>
+                        <h:outputText value="#{vista.ViewDetEmpresaLabel_idper}"/>
+                        <h:outputText value="#{detEmpresaController.selected.idper}" title="#{vista.ViewDetEmpresaTitle_idper}"/>
+                        <h:outputText value="#{vista.ViewDetEmpresaLabel_carper}"/>
+                        <h:outputText value="#{detEmpresaController.selected.carper}" title="#{vista.ViewDetEmpresaTitle_carper}"/>
+                        <h:outputText value="#{vista.ViewDetEmpresaLabel_estasi}"/>
+                        <h:outputText value="#{detEmpresaController.selected.estasi}" title="#{vista.ViewDetEmpresaTitle_estasi}"/>
+                        <h:outputText value="#{vista.ViewDetEmpresaLabel_fecasi}"/>
+                        <h:outputText value="#{detEmpresaController.selected.fecasi}" title="#{vista.ViewDetEmpresaTitle_fecasi}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{vista.Close}" onclick="DetEmpresaViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UbigeoCreateDlg" widgetVar="UbigeoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{vista.CreateUbigeoTitle}">
+            <h:form id="UbigeoCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{ubigeoController.selected != null}">
+                        <p:outputLabel value="#{vista.CreateUbigeoLabel_codubi}" for="codubi" />
+                        <p:inputText id="codubi" value="#{ubigeoController.selected.codubi}" title="#{vista.CreateUbigeoTitle_codubi}" required="true" requiredMessage="#{vista.CreateUbigeoRequiredMessage_codubi}"/>
+                        <p:outputLabel value="#{vista.CreateUbigeoLabel_dptubi}" for="dptubi" />
+                        <p:inputText id="dptubi" value="#{ubigeoController.selected.dptubi}" title="#{vista.CreateUbigeoTitle_dptubi}" required="true" requiredMessage="#{vista.CreateUbigeoRequiredMessage_dptubi}"/>
+                        <p:outputLabel value="#{vista.CreateUbigeoLabel_proubi}" for="proubi" />
+                        <p:inputText id="proubi" value="#{ubigeoController.selected.proubi}" title="#{vista.CreateUbigeoTitle_proubi}" required="true" requiredMessage="#{vista.CreateUbigeoRequiredMessage_proubi}"/>
+                        <p:outputLabel value="#{vista.CreateUbigeoLabel_disubi}" for="disubi" />
+                        <p:inputText id="disubi" value="#{ubigeoController.selected.disubi}" title="#{vista.CreateUbigeoTitle_disubi}" required="true" requiredMessage="#{vista.CreateUbigeoRequiredMessage_disubi}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{ubigeoController.create}" value="#{vista.Save}" update="display,:UbigeoListForm:datalist,:growl" oncomplete="handleSubmit(args,'UbigeoCreateDialog');"/>
+                    <p:commandButton value="#{vista.Cancel}" onclick="UbigeoCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

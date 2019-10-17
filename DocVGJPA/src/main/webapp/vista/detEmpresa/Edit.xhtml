@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetEmpresaEditDlg" widgetVar="DetEmpresaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{vista.EditDetEmpresaTitle}">
+            <h:form id="DetEmpresaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{detEmpresaController.selected != null}">
+                        <p:outputLabel value="#{vista.EditDetEmpresaLabel_idDEMP}" for="idDEMP" />
+                        <p:inputText id="idDEMP" value="#{detEmpresaController.selected.idDEMP}" title="#{vista.EditDetEmpresaTitle_idDEMP}" required="true" requiredMessage="#{vista.EditDetEmpresaRequiredMessage_idDEMP}"/>
+                        <p:outputLabel value="#{vista.EditDetEmpresaLabel_idemp}" for="idemp" />
+                        <p:inputText id="idemp" value="#{detEmpresaController.selected.idemp}" title="#{vista.EditDetEmpresaTitle_idemp}" />
+                        <p:outputLabel value="#{vista.EditDetEmpresaLabel_idper}" for="idper" />
+                        <p:inputText id="idper" value="#{detEmpresaController.selected.idper}" title="#{vista.EditDetEmpresaTitle_idper}" />
+                        <p:outputLabel value="#{vista.EditDetEmpresaLabel_carper}" for="carper" />
+                        <p:inputText id="carper" value="#{detEmpresaController.selected.carper}" title="#{vista.EditDetEmpresaTitle_carper}" />
+                        <p:outputLabel value="#{vista.EditDetEmpresaLabel_estasi}" for="estasi" />
+                        <p:inputText id="estasi" value="#{detEmpresaController.selected.estasi}" title="#{vista.EditDetEmpresaTitle_estasi}" />
+                        <p:outputLabel value="#{vista.EditDetEmpresaLabel_fecasi}" for="fecasi" />
+                        <p:calendar id="fecasi" pattern="MM/dd/yyyy" value="#{detEmpresaController.selected.fecasi}" title="#{vista.EditDetEmpresaTitle_fecasi}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{detEmpresaController.update}" value="#{vista.Save}" update="display,:DetEmpresaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'DetEmpresaEditDialog');"/>
+                    <p:commandButton value="#{vista.Cancel}" onclick="DetEmpresaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
